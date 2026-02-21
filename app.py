@@ -15,23 +15,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-import gradio as gr
-from PIL import Image
-import os
-import time
-import traceback
-import logging
-import sys
-from datetime import datetime
-
-# Настройка логирования
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[logging.StreamHandler(sys.stdout)]
-)
-logger = logging.getLogger(__name__)
-
 def log_function_call(func_name):
     """Декоратор для логирования вызовов функций"""
     def decorator(func):
@@ -246,4 +229,5 @@ with gr.Blocks(title="Инструмент бинарной разметки") a
 if __name__ == "__main__":
     demo.queue(default_concurrency_limit=5)
     demo.launch(server_name="0.0.0.0", server_port=7860)
+
 
