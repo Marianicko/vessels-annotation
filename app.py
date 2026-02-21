@@ -15,6 +15,41 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+import gradio as gr
+from PIL import Image
+import os
+import time
+import traceback
+import logging
+import sys
+from datetime import datetime
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+logger = logging.getLogger(__name__)
+
+def log_function_call(func_name):
+    """Декоратор для логирования вызовов функций"""
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            logger.info(f"🔵 Вход в функцию: {func_name}")
+            try:
+                start_time = time.time()
+                result = func(*args, **kwargs)
+                end_time = time.time()
+                logger.info(f"🟢 Функция {func_name} выполнена за {end_time - start_time:.2f} сек")
+                return result
+            except Exception as e:
+                logger.error(f"🔴 Ошибка в функции {func_name}: {str(e)}")
+                logger.error(traceback.format_exc())
+                raise
+        return wrapper
+    return decorator
+
 # Хранилище оригинальных размеров
 original_sizes = {}
 MAX_IMAGE_SIZE = 1024
@@ -211,3 +246,4 @@ with gr.Blocks(title="Инструмент бинарной разметки") a
 if __name__ == "__main__":
     demo.queue(default_concurrency_limit=5)
     demo.launch(server_name="0.0.0.0", server_port=7860)
+
